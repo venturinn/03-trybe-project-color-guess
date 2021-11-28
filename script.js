@@ -3,10 +3,13 @@ const button = document.getElementById('reset-game');
 const rgb = document.getElementById('rgb-color');
 const allBalls = document.getElementById('cores');
 const answer = document.getElementById('answer');
-
+const placar = document.getElementById('score');
+let activePlay = true;
 
 let cores;
 let corEscolhida;
+
+// Função para aplicar cores de forma randômica no circulos.
 
 function colorBalls() {
   cores = [];
@@ -14,52 +17,47 @@ function colorBalls() {
     const r = String(Math.trunc(Math.random() * 256));
     const g = String(Math.trunc(Math.random() * 256));
     const b = String(Math.trunc(Math.random() * 256));
-    const cor = (`${'rgb('}${r},${g},${b})`);
+    const cor = (`${'rgb('}${r}, ${g}, ${b})`);
     cores.push(cor);
     balls[i].style.backgroundColor = cor;
   }
 }
 
+// Função para definir de forma randômica uma única cor para ser adivinhada em cada rodada.
+
 function secretColor() {
   const playDice = Math.trunc(Math.random() * 6);
   corEscolhida = cores.splice(playDice, 1);
-  let onlyNumbers = corEscolhida[0].slice(3);
-  rgb.innerText=onlyNumbers
+  const onlyNumbers = corEscolhida[0].slice(3);
+  rgb.innerText = onlyNumbers;
 }
 
-colorBalls();
+// Função para reiniciar o jogo sem alterar o placar.
 
 function playAgain() {
   answer.innerText = 'Escolha uma cor';
+  activePlay = true;
   colorBalls();
   secretColor();
-  }
-button.addEventListener('click', playAgain);
+}
 
-function result (event){
+// Função para verificar se o usuário acertou ou errou a sua escolha.
 
-const ballClicked = event.target;
+function result(event) {
+  const ballClicked = event.target;
 
-console.log(corEscolhida[0])
-console.log(ballClicked.style.backgroundColor);
-
-if (ballClicked.style.backgroundColor === corEscolhida[0]){
-
+  if (ballClicked.style.backgroundColor === corEscolhida[0] && activePlay === true) {
+    placar.innerText = parseInt(placar.innerText, 10) + 3;
     answer.innerText = 'Acertou!';
-    
-}else{
-
+    activePlay = false;
+  } else if (activePlay === true) {
     answer.innerText = 'Errou! Tente novamente!';
+    placar.innerText = parseInt(placar.innerText, 10) - 1;
+    activePlay = false;
+  }
 }
-
-
-
-
-}
-
-
-allBalls.addEventListener('click', result);
-
 
 colorBalls();
-secretColor()
+secretColor();
+button.addEventListener('click', playAgain);
+allBalls.addEventListener('click', result);
