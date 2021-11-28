@@ -1,6 +1,10 @@
 const balls = document.getElementsByClassName('ball');
 const button = document.getElementById('reset-game');
 const rgb = document.getElementById('rgb-color');
+const allBalls = document.getElementById('cores');
+const answer = document.getElementById('answer');
+
+
 let cores;
 let corEscolhida;
 
@@ -26,13 +30,35 @@ function secretColor() {
 colorBalls();
 
 function playAgain() {
+  answer.innerText = 'Escolha uma cor';
   colorBalls();
   secretColor();
-}
-
+  }
 button.addEventListener('click', playAgain);
 
+function result (event){
 
+const ballClicked = event.target;
+
+console.log(corEscolhida[0])
+console.log(ballClicked.style.backgroundColor);
+
+if (ballClicked.style.backgroundColor === corEscolhida[0]){
+
+    answer.innerText = 'Acertou!';
+    
+}else{
+
+    answer.innerText = 'Errou! Tente novamente!';
+}
+
+
+
+
+}
+
+
+allBalls.addEventListener('click', result);
 
 
 colorBalls();
